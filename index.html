@@ -1,0 +1,448 @@
+<title>Set 2 Color Accuracy Findings</title>
+<style>
+  :root {
+    --ground: #FAFAF8;
+    --ground-raised: #F1EFE9;
+    --text: #1C1B19;
+    --text-soft: #5C574D;
+    --border: #E4E0D6;
+    --win: #2F6B5E;
+    --win-soft: #E4EEEA;
+    --loss: #B54A2E;
+    --loss-soft: #F6E9E3;
+    --draw: #8A8478;
+    --draw-soft: #EFEDE6;
+    --accent-line: #C7401F;
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #171613;
+    --ground-raised: #211F1B;
+    --text: #EDEAE2;
+    --text-soft: #A79F8F;
+    --border: #34312A;
+    --win: #6FBBA6;
+    --win-soft: #1C2C27;
+    --loss: #E08462;
+    --loss-soft: #302019;
+    --draw: #A79F8F;
+    --draw-soft: #262420;
+    --accent-line: #E08462;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171613;
+      --ground-raised: #211F1B;
+      --text: #EDEAE2;
+      --text-soft: #A79F8F;
+      --border: #34312A;
+      --win: #6FBBA6;
+      --win-soft: #1C2C27;
+      --loss: #E08462;
+      --loss-soft: #302019;
+      --draw: #A79F8F;
+      --draw-soft: #262420;
+      --accent-line: #E08462;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+  }
+
+  header.doc-head {
+    border-bottom: 2px solid var(--text);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-line);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 34px;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    text-wrap: balance;
+    font-weight: 700;
+  }
+
+  .subhead {
+    color: var(--text-soft);
+    font-size: 15px;
+    max-width: 65ch;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--text-soft);
+    flex-wrap: wrap;
+  }
+  .meta-row span { white-space: nowrap; }
+  .meta-row b { color: var(--text); font-weight: 600; }
+
+  h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    margin: 48px 0 4px;
+    font-weight: 700;
+  }
+
+  h2 + .section-note {
+    color: var(--text-soft);
+    font-size: 14px;
+    margin: 0 0 20px;
+    max-width: 65ch;
+  }
+
+  p { max-width: 65ch; margin: 0 0 14px; }
+
+  /* Scoreboard */
+  .scoreboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .score-cell {
+    background: var(--ground-raised);
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .score-num {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 38px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .score-cell.loss .score-num { color: var(--loss); }
+  .score-cell.win .score-num { color: var(--win); }
+  .score-cell.draw .score-num { color: var(--draw); }
+  .score-label {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .bar {
+    display: flex;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 18px 0 4px;
+  }
+  .bar-seg.loss { background: var(--loss); }
+  .bar-seg.draw { background: var(--draw); }
+  .bar-seg.win { background: var(--win); }
+  .bar-caption {
+    font-size: 12px;
+    color: var(--text-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Verdict split */
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .verdict-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
+    background: var(--ground-raised);
+  }
+  .verdict-card h3 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .verdict-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    padding: 5px 0;
+    border-top: 1px solid var(--border);
+  }
+  .verdict-row:first-of-type { border-top: none; }
+  .verdict-row b { font-variant-numeric: tabular-nums; }
+
+  /* Family table */
+  .family-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .family-table th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    padding: 0 10px 8px;
+    border-bottom: 1px solid var(--text);
+    font-weight: 600;
+  }
+  .family-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .family-table tr:last-child td { border-bottom: none; }
+  .family-table .fam-name { font-weight: 600; white-space: nowrap; }
+  .pill {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .pill.win { background: var(--win-soft); color: var(--win); }
+  .pill.loss { background: var(--loss-soft); color: var(--loss); }
+  .pill.draw { background: var(--draw-soft); color: var(--draw); }
+
+  .table-wrap { overflow-x: auto; }
+
+  /* Findings list */
+  .finding {
+    border-left: 3px solid var(--border);
+    padding: 4px 0 4px 16px;
+    margin-bottom: 18px;
+  }
+  .finding.loss-type { border-color: var(--loss); }
+  .finding.win-type { border-color: var(--win); }
+  .finding-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .finding p {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-bottom: 0;
+  }
+  .finding-count {
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Example callouts */
+  .example {
+    background: var(--ground-raised);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin: 10px 0 22px;
+    font-size: 13.5px;
+  }
+  .example .ex-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .example p { margin: 0; color: var(--text); }
+
+  /* Closing note */
+  .closing {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid var(--text);
+  }
+  .closing p {
+    font-size: 15px;
+  }
+
+  footer {
+    margin-top: 40px;
+    font-size: 12.5px;
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 560px) {
+    .scoreboard { grid-template-columns: 1fr; }
+    .verdict-grid { grid-template-columns: 1fr; }
+    .score-num { font-size: 30px; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="doc-head">
+    <div class="eyebrow">Color Accuracy Comparison — Set 2</div>
+    <h1>Smart Colors vs. Hoppn: full results</h1>
+    <p class="subhead">All 85 test rows across 17 color families, run side by side on the same store (tetrachrom-read-write-test.myshopify.com, 1,679 products) with both apps installed.</p>
+    <div class="meta-row">
+      <span><b>85 of 85</b> rows complete</span>
+      <span><b>17</b> color families tested</span>
+      <span><b>5</b> shades per family</span>
+    </div>
+  </header>
+
+  <h2>The scoreboard</h2>
+  <p class="section-note">Winner called per row by comparing the top 8 results from each app for hue accuracy, duplicate products, and off-family misses.</p>
+
+  <div class="scoreboard">
+    <div class="score-cell loss">
+      <div class="score-num">48</div>
+      <div class="score-label">Hoppn wins</div>
+    </div>
+    <div class="score-cell draw">
+      <div class="score-num">27</div>
+      <div class="score-label">Draws</div>
+    </div>
+    <div class="score-cell win">
+      <div class="score-num">10</div>
+      <div class="score-label">Smart Colors wins</div>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="bar-seg loss" style="width: 56.5%"></div>
+    <div class="bar-seg draw" style="width: 31.8%"></div>
+    <div class="bar-seg win" style="width: 11.7%"></div>
+  </div>
+  <div class="bar-caption">
+    <span>56% Hoppn</span>
+    <span>32% draw</span>
+    <span>12% us</span>
+  </div>
+
+  <div class="verdict-grid">
+    <div class="verdict-card">
+      <h3>Smart Colors, per-row verdict</h3>
+      <div class="verdict-row"><span>Good</span><b>25</b></div>
+      <div class="verdict-row"><span>Mixed</span><b>32</b></div>
+      <div class="verdict-row"><span>Bad</span><b>27</b></div>
+      <div class="verdict-row"><span>Error</span><b>1</b></div>
+    </div>
+    <div class="verdict-card">
+      <h3>Hoppn, per-row verdict</h3>
+      <div class="verdict-row"><span>Good</span><b>55</b></div>
+      <div class="verdict-row"><span>Mixed</span><b>24</b></div>
+      <div class="verdict-row"><span>Bad</span><b>6</b></div>
+    </div>
+  </div>
+
+  <h2>Where each app wins</h2>
+  <p class="section-note">Family-by-family breakdown, ordered as tested. Read as: which app's top 8 was closer to the queried shade, more often, across the 5 rows in that family.</p>
+
+  <div class="table-wrap">
+  <table class="family-table">
+    <thead>
+      <tr><th>Family</th><th>Result</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="fam-name">Red</td><td><span class="pill loss">Hoppn 3</span> <span class="pill win">us 1</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Orange</td><td><span class="pill loss">Hoppn 3</span> <span class="pill draw">draw 2</span></td></tr>
+      <tr><td class="fam-name">Yellow</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Chartreuse / Yellow-green</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Green</td><td><span class="pill loss">Hoppn 3</span> <span class="pill win">us 1</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Cyan</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Teal</td><td><span class="pill draw">draw 3</span> <span class="pill loss">Hoppn 2</span></td></tr>
+      <tr><td class="fam-name">Blue</td><td><span class="pill draw">draw 3</span> <span class="pill loss">Hoppn 2</span></td></tr>
+      <tr><td class="fam-name">Indigo</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Purple</td><td><span class="pill draw">draw 3</span> <span class="pill loss">Hoppn 2</span></td></tr>
+      <tr><td class="fam-name">Pink / Magenta</td><td><span class="pill draw">draw 2</span> <span class="pill loss">Hoppn 2</span> <span class="pill win">us 1</span></td></tr>
+      <tr><td class="fam-name">Brown</td><td><span class="pill loss">Hoppn 3</span> <span class="pill win">us 1</span> <span class="pill draw">draw 1</span></td></tr>
+      <tr><td class="fam-name">Beige / Khaki / Taupe</td><td><span class="pill win">us 4</span> <span class="pill loss">Hoppn 1</span></td></tr>
+      <tr><td class="fam-name">Nude / Skin-tone</td><td><span class="pill loss">Hoppn 3</span> <span class="pill draw">draw 2</span></td></tr>
+      <tr><td class="fam-name">Denim wash</td><td><span class="pill loss">Hoppn 4</span> <span class="pill win">us 1</span></td></tr>
+      <tr><td class="fam-name">Metallics</td><td><span class="pill loss">Hoppn 3</span> <span class="pill draw">draw 1</span> <span class="pill win">us 1</span></td></tr>
+      <tr><td class="fam-name">Neutrals (White–Black)</td><td><span class="pill draw">draw 4</span> <span class="pill loss">Hoppn 1</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>What's actually going wrong for us</h2>
+  <p class="section-note">Tagged failure type across all 85 rows, most frequent first.</p>
+
+  <div class="finding loss-type">
+    <div class="finding-title">Ranking problems — <span class="finding-count">33 rows</span></div>
+    <p>Our top 8 sorts the wrong products to the top, or a single visually-close cluster of items (a print family, a fabric pattern) crowds out genuinely on-color garments. This is by far the biggest gap, more than four times any other failure type.</p>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">Example — Row 4, Deep red / brick</div>
+    <p>Hoppn returned deep brick red throughout. We returned a red-and-green patchwork cluster: the same Siena Patchwork Shirt, Iris Patchwork Scarf Tie, and Printed Silk Sarong each shown twice, filling 6 of 8 slots with one print family instead of spreading across genuinely brick-red garments.</p>
+  </div>
+
+  <div class="finding loss-type">
+    <div class="finding-title">Duplicate products in the same top 8 — <span class="finding-count">113 slots across ~25 rows</span></div>
+    <p>The same product (often the exact same listing, sometimes a near-variant) appears twice in one result grid, wasting a slot that could have surfaced a different genuine match.</p>
+  </div>
+
+  <div class="finding loss-type">
+    <div class="finding-title">Off-family or accessory bleed — <span class="finding-count">9 rows combined</span></div>
+    <p>Results include items that are not actually the queried color family, most visibly on gray and metallic queries where silver-toned sneakers and sunglasses got pulled in alongside genuinely gray garments.</p>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">Example — Row 83, Gray</div>
+    <p>Only 2 of 8 results were genuinely gray garments. The rest were white and silver-metallic sneakers plus sunglasses in red, green, navy, and blue accents, pulled in through a silver-metallic association rather than an actual gray hue match. Hoppn returned 7 of 8 genuinely gray-toned items.</p>
+  </div>
+
+  <h2>Where we're strong</h2>
+  <p class="section-note">Beige, khaki, and taupe was the one family where we won outright, 4 of 5 rows.</p>
+
+  <div class="finding win-type">
+    <div class="finding-title">Beige / Khaki / Taupe — <span class="finding-count">4 of 5 rows won</span></div>
+    <p>Clean, on-hue results with no duplicates across most of this family, consistently beating Hoppn's precision on sand, khaki, and taupe tones.</p>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">Example — Row 61, Pastel beige / ivory</div>
+    <p>Our results: 8 of 8 genuine, 8 distinct products, a clean pale warm-white to vanilla to ivory match with zero duplicates.</p>
+  </div>
+
+  <div class="finding win-type">
+    <div class="finding-title">Neutrals (white–black) — <span class="finding-count">4 draws, 1 loss</span></div>
+    <p>Both apps handle pure black and white queries cleanly. Neither had a hue miss here, and duplication was not a factor.</p>
+  </div>
+
+  <div class="closing">
+    <p><b>Bottom line:</b> Hoppn wins on precision and consistency across most saturated hues (red, orange, yellow, green, cyan, indigo), largely because our top-8 ranking surfaces duplicate products and off-target clusters more often than it should. We hold a clear edge on beige, khaki, and taupe tones, and the two apps are effectively tied on blue, purple, teal, pink, and neutral black/white queries.</p>
+    <p>For more info on each color there's the notes and notion link column to get more details on each comparison, and also check the top 8 of both Smart Colors and Hoppn, you can view it in the notion link where I uploaded both screenshots.</p>
+  </div>
+
+  <footer>Source: docs/color-accuracy-set2.csv · tetrachrom-read-write-test.myshopify.com · 1,679 products</footer>
+
+</div>
