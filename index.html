@@ -1,448 +1,1417 @@
-<title>Set 2 Color Accuracy Findings</title>
+<title>Smart Colors — Overlay Design Spec</title>
 <style>
   :root {
-    --ground: #FAFAF8;
-    --ground-raised: #F1EFE9;
-    --text: #1C1B19;
-    --text-soft: #5C574D;
-    --border: #E4E0D6;
-    --win: #2F6B5E;
-    --win-soft: #E4EEEA;
-    --loss: #B54A2E;
-    --loss-soft: #F6E9E3;
-    --draw: #8A8478;
-    --draw-soft: #EFEDE6;
-    --accent-line: #C7401F;
-  }
-
-  :root[data-theme="dark"] {
-    --ground: #171613;
-    --ground-raised: #211F1B;
-    --text: #EDEAE2;
-    --text-soft: #A79F8F;
-    --border: #34312A;
-    --win: #6FBBA6;
-    --win-soft: #1C2C27;
-    --loss: #E08462;
-    --loss-soft: #302019;
-    --draw: #A79F8F;
-    --draw-soft: #262420;
-    --accent-line: #E08462;
+    --ground: #FBFAF9;
+    --raised: #FFFFFF;
+    --ink: #17151A;
+    --ink-2: #4A4550;
+    --ink-3: #7D7686;
+    --line: #E6E2E9;
+    --line-2: #F0EDF2;
+    --accent: #653673;
+    --accent-soft: #F3EDF6;
+    --note: #2B6A6B;
+    --note-soft: #EAF2F2;
+    --warn: #8A5A1B;
+    --warn-soft: #FBF0DE;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+    --r: 10px;
   }
 
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --ground: #171613;
-      --ground-raised: #211F1B;
-      --text: #EDEAE2;
-      --text-soft: #A79F8F;
-      --border: #34312A;
-      --win: #6FBBA6;
-      --win-soft: #1C2C27;
-      --loss: #E08462;
-      --loss-soft: #302019;
-      --draw: #A79F8F;
-      --draw-soft: #262420;
-      --accent-line: #E08462;
+    :root {
+      --ground: #141217;
+      --raised: #1D1A21;
+      --ink: #F4F1F6;
+      --ink-2: #BDB6C4;
+      --ink-3: #8B8395;
+      --line: #322D39;
+      --line-2: #272330;
+      --accent: #C9A4D6;
+      --accent-soft: #2A2031;
+      --note: #7FBDBE;
+      --note-soft: #1B2A2B;
+      --warn: #E0B576;
+      --warn-soft: #2E2416;
     }
   }
-
-  * { box-sizing: border-box; }
+  :root[data-theme="dark"] {
+    --ground: #141217;
+    --raised: #1D1A21;
+    --ink: #F4F1F6;
+    --ink-2: #BDB6C4;
+    --ink-3: #8B8395;
+    --line: #322D39;
+    --line-2: #272330;
+    --accent: #C9A4D6;
+    --accent-soft: #2A2031;
+    --note: #7FBDBE;
+    --note-soft: #1B2A2B;
+    --warn: #E0B576;
+    --warn-soft: #2E2416;
+  }
+  :root[data-theme="light"] {
+    --ground: #FBFAF9;
+    --raised: #FFFFFF;
+    --ink: #17151A;
+    --ink-2: #4A4550;
+    --ink-3: #7D7686;
+    --line: #E6E2E9;
+    --line-2: #F0EDF2;
+    --accent: #653673;
+    --accent-soft: #F3EDF6;
+    --note: #2B6A6B;
+    --note-soft: #EAF2F2;
+    --warn: #8A5A1B;
+    --warn-soft: #FBF0DE;
+  }
 
   body {
     background: var(--ground);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    line-height: 1.55;
-    margin: 0;
-    padding: 0;
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .page {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 64px 24px 96px;
-  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px 120px; }
 
-  header.doc-head {
-    border-bottom: 2px solid var(--text);
-    padding-bottom: 24px;
-    margin-bottom: 40px;
+  /* ---------- masthead ---------- */
+  .mast {
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0;
   }
-
   .eyebrow {
-    font-size: 12px;
-    letter-spacing: 0.12em;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--accent-line);
-    font-weight: 600;
-    margin-bottom: 10px;
+    color: var(--note);
+    margin-bottom: 18px;
   }
-
-  h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 34px;
-    line-height: 1.15;
-    margin: 0 0 10px;
+  .mast h1 {
+    font-family: var(--serif);
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: -0.015em;
     text-wrap: balance;
-    font-weight: 700;
+    margin-bottom: 18px;
   }
-
-  .subhead {
-    color: var(--text-soft);
-    font-size: 15px;
-    max-width: 65ch;
+  .mast .lede {
+    font-size: 17px;
+    color: var(--ink-2);
+    max-width: 60ch;
   }
+  .mast .lede strong { color: var(--ink); font-weight: 600; }
 
   .meta-row {
     display: flex;
-    gap: 24px;
-    margin-top: 18px;
-    font-size: 13px;
-    color: var(--text-soft);
     flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
   }
-  .meta-row span { white-space: nowrap; }
-  .meta-row b { color: var(--text); font-weight: 600; }
-
-  h2 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 21px;
-    margin: 48px 0 4px;
-    font-weight: 700;
-  }
-
-  h2 + .section-note {
-    color: var(--text-soft);
-    font-size: 14px;
-    margin: 0 0 20px;
-    max-width: 65ch;
-  }
-
-  p { max-width: 65ch; margin: 0 0 14px; }
-
-  /* Scoreboard */
-  .scoreboard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 8px;
-  }
-  .score-cell {
-    background: var(--ground-raised);
-    padding: 20px 16px;
-    text-align: center;
-  }
-  .score-num {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 38px;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
-  }
-  .score-cell.loss .score-num { color: var(--loss); }
-  .score-cell.win .score-num { color: var(--win); }
-  .score-cell.draw .score-num { color: var(--draw); }
-  .score-label {
-    margin-top: 8px;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-soft);
-  }
-
-  .bar {
-    display: flex;
-    height: 10px;
-    border-radius: 5px;
-    overflow: hidden;
-    margin: 18px 0 4px;
-  }
-  .bar-seg.loss { background: var(--loss); }
-  .bar-seg.draw { background: var(--draw); }
-  .bar-seg.win { background: var(--win); }
-  .bar-caption {
-    font-size: 12px;
-    color: var(--text-soft);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* Verdict split */
-  .verdict-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 20px;
-  }
-  .verdict-card {
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px 18px;
-    background: var(--ground-raised);
-  }
-  .verdict-card h3 {
-    margin: 0 0 12px;
-    font-size: 14px;
-    font-weight: 700;
-  }
-  .verdict-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13.5px;
-    padding: 5px 0;
-    border-top: 1px solid var(--border);
-  }
-  .verdict-row:first-of-type { border-top: none; }
-  .verdict-row b { font-variant-numeric: tabular-nums; }
-
-  /* Family table */
-  .family-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-  .family-table th {
-    text-align: left;
+  .chip {
+    font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 0.06em;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    background: var(--raised);
+  }
+  .chip.on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  /* ---------- section rhythm ---------- */
+  section { padding: 56px 0; border-bottom: 1px solid var(--line-2); }
+  .sec-head { margin-bottom: 30px; }
+  .sec-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.1em;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 6px 0 10px;
+  }
+  .sec-head p { color: var(--ink-2); max-width: 68ch; font-size: 15px; }
+  h3 {
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--text-soft);
-    padding: 0 10px 8px;
-    border-bottom: 1px solid var(--text);
-    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 14px;
   }
-  .family-table td {
-    padding: 10px 10px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  .family-table tr:last-child td { border-bottom: none; }
-  .family-table .fam-name { font-weight: 600; white-space: nowrap; }
-  .pill {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 2px 9px;
-    border-radius: 100px;
-    white-space: nowrap;
-  }
-  .pill.win { background: var(--win-soft); color: var(--win); }
-  .pill.loss { background: var(--loss-soft); color: var(--loss); }
-  .pill.draw { background: var(--draw-soft); color: var(--draw); }
 
-  .table-wrap { overflow-x: auto; }
-
-  /* Findings list */
-  .finding {
-    border-left: 3px solid var(--border);
-    padding: 4px 0 4px 16px;
-    margin-bottom: 18px;
+  /* ---------- split layout ---------- */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
   }
-  .finding.loss-type { border-color: var(--loss); }
-  .finding.win-type { border-color: var(--win); }
-  .finding-title {
-    font-weight: 700;
-    font-size: 15px;
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 26px; } }
+
+  .stage {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 24px;
+    overflow-x: auto;
+  }
+  .stage.plain { padding: 0; overflow: hidden; }
+  /* A stage holding the (light-only) overlay mock keeps a light surface, so the
+     cards' own edges stay visible when the page is in dark mode. Scoped to
+     stages that are ONLY the mock -- sections 05 and 06 mix page chrome with a
+     preview grid and must follow the page theme instead. */
+  .stage.light { background: #FBFAF9; border-color: #E6E2E9; }
+  /* The preview grid inside a themed stage gets its own light panel. */
+  .preview-panel {
+    background: #FBFAF9;
+    border: 1px solid #E6E2E9;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .notes { display: flex; flex-direction: column; gap: 18px; }
+  .note {
+    border-left: 2px solid var(--note);
+    padding: 2px 0 2px 14px;
+  }
+  .note h4 {
+    font-size: 13px;
+    font-weight: 650;
     margin-bottom: 4px;
   }
-  .finding p {
-    font-size: 14px;
-    color: var(--text-soft);
-    margin-bottom: 0;
-  }
-  .finding-count {
-    font-variant-numeric: tabular-nums;
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  /* Example callouts */
-  .example {
-    background: var(--ground-raised);
-    border: 1px solid var(--border);
+  .note p { font-size: 14px; color: var(--ink-2); }
+  .note code, .inline-code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--note-soft);
+    color: var(--note);
+    padding: 1px 5px;
     border-radius: 4px;
-    padding: 14px 16px;
-    margin: 10px 0 22px;
-    font-size: 13.5px;
   }
-  .example .ex-label {
-    font-size: 11px;
-    letter-spacing: 0.06em;
+
+  .callout {
+    background: var(--warn-soft);
+    border-radius: var(--r);
+    padding: 16px 18px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .callout strong { color: var(--warn); }
+  .callout + .callout { margin-top: 12px; }
+
+  /* ---------- spec tables ---------- */
+  .tbl-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 400px;
+  }
+  th {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-soft);
-    margin-bottom: 6px;
-    font-weight: 600;
+    color: var(--ink-3);
+    font-weight: 500;
+    padding: 0 12px 8px 0;
+    border-bottom: 1px solid var(--line);
   }
-  .example p { margin: 0; color: var(--text); }
-
-  /* Closing note */
-  .closing {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 2px solid var(--text);
+  td {
+    padding: 9px 12px 9px 0;
+    border-bottom: 1px solid var(--line-2);
+    color: var(--ink-2);
+    vertical-align: top;
   }
-  .closing p {
-    font-size: 15px;
-  }
-
-  footer {
-    margin-top: 40px;
-    font-size: 12.5px;
-    color: var(--text-soft);
+  td:first-child { color: var(--ink); font-weight: 550; white-space: nowrap; }
+  td.num, td.tok {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
   }
 
-  @media (max-width: 560px) {
-    .scoreboard { grid-template-columns: 1fr; }
-    .verdict-grid { grid-template-columns: 1fr; }
-    .score-num { font-size: 30px; }
+  /* ================= OVERLAY MOCK =================
+     Pinned light in both page themes on purpose: the overlay itself is
+     light-only today, so showing it dark would be a mock of something that does
+     not exist. Section 08 raises whether that should change. */
+  .ov {
+    border: 1px solid #E6E2E9;
+    border-radius: var(--r);
+    overflow: hidden;
+    background: #fff;
+    color: #1a1a1a;
+    font-family: Inter, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 460px;
   }
+  :root[data-theme="dark"] .ov, :root[data-theme="dark"] .ovm { filter: none; }
+
+  .ov-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.10);
+    flex: 0 0 auto;
+  }
+  .ov-sw {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: #C9839E;
+    flex: 0 0 auto;
+  }
+  .ov-titles { display: flex; flex-direction: column; min-width: 0; }
+  .ov-name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+  .ov-count { font-size: 12px; color: #6b6b6b; }
+  .ov-spacer { flex: 1 1 auto; }
+
+  .ov-change {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 7px 12px; margin-right: 4px;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 999px;
+    background: transparent;
+    font: inherit; font-size: 13px; color: #1a1a1a;
+    cursor: pointer; white-space: nowrap;
+  }
+  .ov-wheel {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: conic-gradient(#e14b4b,#e1a84b,#d9e14b,#4be158,#4bd3e1,#4b63e1,#a84be1,#e14b9c,#e14b4b);
+    flex: 0 0 auto;
+  }
+  .ov-close {
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    border: 0; border-radius: 50%;
+    background: transparent; cursor: pointer; color: #1a1a1a;
+  }
+  .ov-body {
+    flex: 1 1 auto;
+    padding: 20px 20px 40px;
+    overflow-y: auto;
+  }
+  .ov-foot {
+    flex: 0 0 auto;
+    padding: 10px 20px 14px;
+    font-size: 11px; color: #6b6b6b;
+    text-align: center;
+    border-top: 1px solid rgba(0,0,0,0.10);
+  }
+
+  .ov-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 0; padding: 0; list-style: none;
+    align-content: start;
+  }
+  .ov-grid.cols3 { grid-template-columns: repeat(3, 1fr); }
+  .ov-grid.cols2 { grid-template-columns: repeat(2, 1fr); }
+
+  /* ---------- the card ---------- */
+  .c {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+  }
+  .c-media {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,0.04);
+    aspect-ratio: var(--d-ratio, auto);
+    border-radius: 6px;
+  }
+  .c-img {
+    display: block;
+    width: 100%; height: var(--d-imgh, 100%);
+    object-fit: var(--d-fit, cover);
+    transition: opacity .35s ease, transform .4s ease;
+  }
+  .c-img.alt { position: absolute; inset: 0; opacity: 0; }
+  .c:hover .c-img.alt { opacity: 1; }
+  .c:hover .c-img.main { opacity: 0; }
+
+  .c-body {
+    display: flex; flex-direction: column;
+    gap: var(--d-tgap, 4px);
+    padding: var(--d-toff, 10px) 2px 0;
+  }
+  .c-vendor {
+    font-size: 11px; line-height: 1.3;
+    letter-spacing: .04em; text-transform: uppercase;
+    color: #6b6b6b;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .hide-vendor .c-vendor, .hide-title .c-title, .hide-price .c-price { display: none; }
+  .c-title {
+    display: -webkit-box;
+    font-size: 13px; line-height: 1.4;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #1a1a1a;
+  }
+  .c-price {
+    display: block;
+    font-size: 16px; line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+    color: #1a1a1a;
+  }
+
+  /* ATC */
+  .c-atc {
+    position: absolute;
+    right: 8px; bottom: 8px;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(6px);
+    display: grid; place-items: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .18s ease, transform .18s ease;
+    color: #1a1a1a;
+    padding: 0;
+  }
+  .c-media:hover .c-atc, .c-atc:focus-visible { opacity: 1; transform: none; }
+  .c-atc svg { width: 17px; height: 17px; display: block; }
+  .c-atc.is-added { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  .c-badge {
+    position: absolute;
+    left: 8px; top: 8px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.94);
+    color: #1a1a1a;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .c.soldout .c-img { opacity: .55; }
+
+
+  /* ATC option B: a button under the price, always visible.
+     Scoped to .atc-b so option A (the floating button on the image) is
+     untouched and the two can sit side by side. */
+  .atc-b .c-atc { display: none; }
+  .c-atc-inline {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 9px 12px;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    background: transparent;
+    color: #1a1a1a;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .c-atc-inline:hover { background: #1a1a1a; color: #fff; }
+  .c-atc-inline.is-added { background: #1a1a1a; color: #fff; }
+  .atc-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 560px) { .atc-compare { grid-template-columns: 1fr; } }
+  .atc-compare h5 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+
+  /* ---------- skeleton / loading ---------- */
+  .sk { border-radius: 6px; background: rgba(0,0,0,0.07); position: relative; overflow: hidden; }
+  .sk-img { aspect-ratio: 1/1; width: 100%; }
+  .sk-line { height: 11px; margin-top: 9px; border-radius: 2px; }
+  .sk-line.short { width: 55%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sk::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent);
+      transform: translateX(-100%);
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer { to { transform: translateX(100%); } }
+  }
+
+  /* hue sweep loader */
+  .hue-bar {
+    height: 3px; width: 100%;
+    background: rgba(0,0,0,0.06);
+    position: relative; overflow: hidden;
+  }
+  .hue-bar::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,#e14b4b,#e1a84b,#d9e14b,#4be158,#4bd3e1,#4b63e1,#a84be1,#e14b9c);
+    transform: translateX(-100%);
+    animation: sweep 1.25s cubic-bezier(.4,0,.2,1) infinite;
+  }
+  @keyframes sweep { to { transform: translateX(100%); } }
+
+  .pulse-dot {
+    width: 54px; height: 54px; border-radius: 50%;
+    background: #C9839E;
+    position: relative;
+    margin: 0 auto 18px;
+  }
+  .pulse-dot::before, .pulse-dot::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 2px solid #C9839E;
+    animation: halo 1.9s ease-out infinite;
+  }
+  .pulse-dot::after { animation-delay: .95s; }
+  @keyframes halo {
+    0% { transform: scale(1); opacity: .7; }
+    100% { transform: scale(2.1); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sk::after, .hue-bar::after, .pulse-dot::before, .pulse-dot::after { animation: none; }
+    .hue-bar::after { transform: none; opacity: .5; }
+  }
+
+
+  /* loader 3: color settle
+     Tiles start as neutral greys and resolve into the searched color one at a
+     time -- the search finding matches, shown rather than described. The delays
+     are deliberately uneven so it reads as results arriving, not as a progress
+     bar counting down. */
+  .settle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sc-gap, 12px);
+    list-style: none; margin: 0; padding: 0;
+  }
+  .settle-grid li { aspect-ratio: 1 / 1; }
+  .settle {
+    width: 100%; height: 100%;
+    border-radius: 6px;
+    background: #DEDEDE;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .settle { animation: settle 2.6s ease-in-out infinite; }
+    .settle-grid li:nth-child(1)  .settle { animation-delay: .00s; }
+    .settle-grid li:nth-child(2)  .settle { animation-delay: .42s; }
+    .settle-grid li:nth-child(3)  .settle { animation-delay: .15s; }
+    .settle-grid li:nth-child(4)  .settle { animation-delay: .71s; }
+    .settle-grid li:nth-child(5)  .settle { animation-delay: .28s; }
+    .settle-grid li:nth-child(6)  .settle { animation-delay: .95s; }
+    .settle-grid li:nth-child(7)  .settle { animation-delay: .07s; }
+    .settle-grid li:nth-child(8)  .settle { animation-delay: .60s; }
+  }
+  @keyframes settle {
+    0%, 8%    { background: #DEDEDE; transform: scale(.97); }
+    28%, 62%  { background: #C9839E; transform: scale(1); }
+    88%, 100% { background: #DEDEDE; transform: scale(.97); }
+  }
+  /* Reduced motion gets the destination, not the journey: a still grid already
+     in the searched color, which still says "we are looking for this". */
+  @media (prefers-reduced-motion: reduce) {
+    .settle { background: #C9839E; }
+  }
+
+  /* ---------- message states ---------- */
+  .ov-msg {
+    display: grid; place-items: center;
+    min-height: 300px; text-align: center;
+    padding: 20px; color: #6b6b6b; font-size: 14px;
+  }
+  .ov-msg strong { display: block; color: #1a1a1a; font-size: 16px; margin-bottom: 6px; }
+  .ov-msg .btn {
+    margin-top: 16px;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px;
+    border: 1px solid rgba(0,0,0,0.14);
+    border-radius: 999px;
+    background: transparent;
+    font: inherit; font-size: 13px; color: #1a1a1a;
+    cursor: pointer;
+  }
+
+  /* ---------- state switcher ---------- */
+  .switch {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 16px;
+  }
+  .switch button {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .switch button:hover { border-color: var(--accent); }
+  .switch button[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .hidden { display: none !important; }
+
+  /* ---------- mobile frame ---------- */
+  .phone {
+    width: 300px;
+    border: 1px solid #E6E2E9;
+    border-radius: 24px;
+    padding: 8px;
+    background: #fff;
+    margin: 0 auto;
+  }
+  .phone .ov { border-radius: 17px; min-height: 540px; }
+  .phone .ov-head { padding: 10px 12px; gap: 9px; }
+  .phone .ov-sw { display: none; }
+  .phone .ov-name { font-size: 14px; }
+  .phone .ov-change {
+    width: 44px; height: 44px; padding: 0;
+    justify-content: center; margin-right: 2px;
+  }
+  .phone .ov-change .lbl { display: none; }
+  .phone .ov-wheel { width: 20px; height: 20px; }
+  .phone .ov-close { width: 44px; height: 44px; }
+  .phone .ov-body { padding: 12px 12px 28px; }
+  .phone .ov-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .phone .c-atc { opacity: 1; transform: none; width: 34px; height: 34px; }
+  .phone .ov-foot { padding-top: 8px; font-size: 10px; }
+
+  /* ---------- deliverables ---------- */
+  .deliv { display: grid; gap: 1px; background: var(--line); border-radius: var(--r); overflow: hidden; border: 1px solid var(--line); }
+  .deliv-row {
+    display: grid;
+    grid-template-columns: 26px 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+    background: var(--raised);
+    padding: 14px 16px;
+  }
+  .deliv-row .n { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .deliv-row .what { font-size: 14px; }
+  .deliv-row .what em { color: var(--ink-3); font-style: normal; display: block; font-size: 13px; margin-top: 2px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px;
+    padding: 3px 8px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .tag.need { background: var(--accent-soft); color: var(--accent); }
+  .tag.have { background: var(--note-soft); color: var(--note); }
+
+  .foot {
+    padding: 44px 0 0;
+    color: var(--ink-3);
+    font-size: 13px;
+  }
+
+  /* settings mock */
+  .setting {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .setting:last-child { border-bottom: 0; }
+  .setting .lab { font-size: 14px; }
+  .setting .lab em { display: block; font-style: normal; font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+  .seg button {
+    font-family: var(--mono); font-size: 11px;
+    padding: 6px 11px; border: 0; cursor: pointer;
+    background: var(--raised); color: var(--ink-2);
+    border-right: 1px solid var(--line);
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 </style>
 
-<div class="page">
+<div class="wrap">
 
-  <header class="doc-head">
-    <div class="eyebrow">Color Accuracy Comparison — Set 2</div>
-    <h1>Smart Colors vs. Hoppn: full results</h1>
-    <p class="subhead">All 85 test rows across 17 color families, run side by side on the same store (tetrachrom-read-write-test.myshopify.com, 1,679 products) with both apps installed.</p>
+  <header class="mast">
+    <div class="eyebrow">Smart Colors · Design Brief for Launch</div>
+    <h1>The color results overlay</h1>
+    <p class="lede">
+      Everything below is <strong>live, working markup</strong> — hover the cards, switch the states,
+      watch the loaders. It is what ships today, plus the few pieces still open.
+    </p>
     <div class="meta-row">
-      <span><b>85 of 85</b> rows complete</span>
-      <span><b>17</b> color families tested</span>
-      <span><b>5</b> shades per family</span>
+      <span class="chip on">Our own card design</span>
+      <span class="chip">Theme font inherited</span>
+      <span class="chip">Shadow DOM — theme cannot restyle us</span>
+      <span class="chip">Scope: launch only</span>
     </div>
   </header>
 
-  <h2>The scoreboard</h2>
-  <p class="section-note">Winner called per row by comparing the top 8 results from each app for hue accuracy, duplicate products, and off-family misses.</p>
-
-  <div class="scoreboard">
-    <div class="score-cell loss">
-      <div class="score-num">48</div>
-      <div class="score-label">Hoppn wins</div>
+  <!-- ============ 1. ANATOMY ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <h2>Card anatomy</h2>
+      <p>
+        The card is ours on every theme and every page. The only thing taken from the store is its
+        <strong>font family</strong>, which crosses the shadow boundary for free. Hover a card to see
+        the second image and the add-to-cart button.
+      </p>
     </div>
-    <div class="score-cell draw">
-      <div class="score-num">27</div>
-      <div class="score-label">Draws</div>
+
+    <div class="split">
+      <div class="stage light">
+        <ul class="ov-grid cols3" style="font-family:Inter,sans-serif;">
+          <li>
+            <a class="c" href="#" onclick="return false">
+              <span class="c-media">
+                <img class="c-img main" alt="Charcoal wool coat, front"
+                     src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8e8e8'/%3E%3Crect x='28' y='18' width='44' height='64' rx='5' fill='%233f3f42'/%3E%3Crect x='46' y='18' width='8' height='64' fill='%232e2e31'/%3E%3C/svg%3E">
+                <img class="c-img alt" alt="Charcoal wool coat, on model"
+                     src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23dfe4e2'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%233f3f42'/%3E%3C/svg%3E">
+                <button class="c-atc" aria-label="Add Wool Coat to cart" onclick="return addFx(this)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                </button>
+              </span>
+              <span class="c-body">
+                <span class="c-title">Wool Coat — Charcoal</span>
+                <span class="c-price">$495.00</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="c" href="#" onclick="return false">
+              <span class="c-media">
+                <img class="c-img main" alt="Blush silk scarf"
+                     src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Cpath d='M25 25h50v50H25z' fill='%23c9839e'/%3E%3Cpath d='M25 25l50 50M75 25L25 75' stroke='%23b9718e' stroke-width='2'/%3E%3C/svg%3E">
+                <img class="c-img alt" alt="Blush silk scarf, styled"
+                     src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='26' r='11' fill='%23c8b49e'/%3E%3Cpath d='M36 36q14 10 28 0v18q-14 8-28 0z' fill='%23c9839e'/%3E%3C/svg%3E">
+                <button class="c-atc" aria-label="Add Silk Scarf to cart" onclick="return addFx(this)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                </button>
+              </span>
+              <span class="c-body">
+                <span class="c-title">Silk Scarf — Blush</span>
+                <span class="c-price">$85.00</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="c soldout" href="#" onclick="return false">
+              <span class="c-media">
+                <img class="c-img main" alt="Sage knit sweater"
+                     src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e9ece7'/%3E%3Crect x='26' y='26' width='48' height='46' rx='7' fill='%238ea37f'/%3E%3Crect x='18' y='30' width='12' height='34' rx='5' fill='%238ea37f'/%3E%3Crect x='70' y='30' width='12' height='34' rx='5' fill='%238ea37f'/%3E%3C/svg%3E">
+                <span class="c-badge">Sold out</span>
+              </span>
+              <span class="c-body">
+                <span class="c-title">Knit Sweater — Sage</span>
+                <span class="c-price">$225.00</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h4>Second image on hover</h4>
+          <p>Cross-fades to the product's second image over <code>350ms</code>. Every card on this page
+             has one, so you can hover any of them. A product with only one image simply does not
+             transition — never a blank frame.</p>
+          <p style="margin-top:6px">The sold-out card is the one exception: no hover image and no
+             add-to-cart, since neither leads anywhere.</p>
+        </div>
+        <div class="note">
+          <h4>Add to cart</h4>
+          <p>Shown here as the floating button on hover. There is a second option — a button under the
+             price — compared side by side in the next section. We need you to pick one.</p>
+        </div>
+        <div class="note">
+          <h4>Sold out</h4>
+          <p>Badge top-left, image at 55% opacity, no ATC button and no hover image. Position is never
+             demoted — color relevance decides ranking. Merchant can hide these entirely.</p>
+        </div>
+        <div class="note">
+          <h4>Image ratio and fit</h4>
+          <p>Both are merchant settings — see section 06, where they are live. The card has to hold its
+             shape at any of them, from a 16:9 band to a 2:3 portrait.</p>
+        </div>
+      </div>
     </div>
-    <div class="score-cell win">
-      <div class="score-num">10</div>
-      <div class="score-label">Smart Colors wins</div>
+  </section>
+
+
+  <!-- ============ ATC COMPARISON ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <h2>Add to cart — two options</h2>
+      <p>Hover each card. We need to pick one, and it is a straightforward choice rather than something
+         that needs designing from scratch.</p>
     </div>
-  </div>
 
-  <div class="bar">
-    <div class="bar-seg loss" style="width: 56.5%"></div>
-    <div class="bar-seg draw" style="width: 31.8%"></div>
-    <div class="bar-seg win" style="width: 11.7%"></div>
-  </div>
-  <div class="bar-caption">
-    <span>56% Hoppn</span>
-    <span>32% draw</span>
-    <span>12% us</span>
-  </div>
+    <div class="split">
+      <div class="stage light">
+        <div class="atc-compare">
+          <div>
+            <h5>A — floating, on hover</h5>
+            <ul class="ov-grid" style="grid-template-columns:1fr;font-family:Inter,sans-serif;">
+              <li><a class="c" href="#" onclick="return false">
+                <span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Crect x='28' y='22' width='44' height='56' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E">
+                  <button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button>
+                </span>
+                <span class="c-body"><span class="c-title">Cotton Shirt — Dusty Rose</span>
+                  <span class="c-price">$295.00</span></span></a></li>
+            </ul>
+          </div>
+          <div class="atc-b">
+            <h5>B — under the price, always visible</h5>
+            <ul class="ov-grid" style="grid-template-columns:1fr;font-family:Inter,sans-serif;">
+              <li><a class="c" href="#" onclick="return false">
+                <span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Crect x='28' y='22' width='44' height='56' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"></span>
+                <span class="c-body"><span class="c-title">Cotton Shirt — Dusty Rose</span>
+                  <span class="c-price">$295.00</span>
+                  <button class="c-atc-inline" onclick="return addInline(this)">Add to cart</button>
+                </span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-  <div class="verdict-grid">
-    <div class="verdict-card">
-      <h3>Smart Colors, per-row verdict</h3>
-      <div class="verdict-row"><span>Good</span><b>25</b></div>
-      <div class="verdict-row"><span>Mixed</span><b>32</b></div>
-      <div class="verdict-row"><span>Bad</span><b>27</b></div>
-      <div class="verdict-row"><span>Error</span><b>1</b></div>
+      <div class="notes">
+        <div class="note">
+          <h4>A — floating button</h4>
+          <p>Keeps the card clean and lets the product fill the frame. The trade: it is invisible until
+             hover, so a shopper may not know it is there — and on mobile there is no hover, so it has to
+             be permanently visible anyway.</p>
+        </div>
+        <div class="note">
+          <h4>B — button under the price</h4>
+          <p>The more common pattern, and the more discoverable one. Costs about 40px of height per card,
+             which means slightly fewer products visible before scrolling. Identical on mobile and
+             desktop.</p>
+        </div>
+        <div class="note">
+          <h4>Our suggestion</h4>
+          <p><strong>B</strong>, unless the cards need to stay minimal. Add to cart is how this feature
+             proves it drives sales, so making it obvious matters more than keeping the card spare. Happy
+             to go with A if you prefer the cleaner look.</p>
+        </div>
+        <div class="note">
+          <h4>Either way</h4>
+          <p>Products with multiple sizes or variants will send the shopper to the product page instead of
+             adding directly — we cannot guess which size they want.</p>
+        </div>
+      </div>
     </div>
-    <div class="verdict-card">
-      <h3>Hoppn, per-row verdict</h3>
-      <div class="verdict-row"><span>Good</span><b>55</b></div>
-      <div class="verdict-row"><span>Mixed</span><b>24</b></div>
-      <div class="verdict-row"><span>Bad</span><b>6</b></div>
+  </section>
+
+  <!-- ============ 3. STATES ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <h2>Every state the shopper can land on</h2>
+      <p>Switch between them. All five exist in code today — the loading animation is the one Heather
+         asked us to improve, and three options are shown below.</p>
     </div>
+
+    <div class="switch" role="group" aria-label="Overlay state">
+      <button aria-pressed="true" onclick="showState('results', this)">results</button>
+      <button aria-pressed="false" onclick="showState('loading', this)">loading — skeleton</button>
+      <button aria-pressed="false" onclick="showState('loading2', this)">loading — hue sweep</button>
+      <button aria-pressed="false" onclick="showState('loading3', this)">loading — color settle</button>
+      <button aria-pressed="false" onclick="showState('empty', this)">empty</button>
+      <button aria-pressed="false" onclick="showState('error', this)">error</button>
+    </div>
+
+    <div class="split">
+      <div class="stage plain light">
+        <div class="ov">
+          <div class="ov-head">
+            <span class="ov-sw"></span>
+            <span class="ov-titles">
+              <span class="ov-name">#C9839E</span>
+              <span class="ov-count" id="cnt">24 matches</span>
+            </span>
+            <span class="ov-spacer"></span>
+            <button class="ov-change">
+              <span class="ov-wheel"></span><span class="lbl">Change Color</span>
+            </button>
+            <button class="ov-close" aria-label="Close">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="hue-bar hidden" id="huebar"></div>
+
+          <div class="ov-body">
+            <!-- results -->
+            <ul class="ov-grid cols3" id="st-results">
+              <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Dusty rose cotton shirt" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Crect x='28' y='22' width='44' height='56' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Cotton Shirt — Dusty Rose</span><span class="c-price">$295.00</span></span></a></li>
+              <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Sand linen trouser" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ecebe6'/%3E%3Crect x='32' y='20' width='16' height='62' rx='4' fill='%23cfc0a8'/%3E%3Crect x='52' y='20' width='16' height='62' rx='4' fill='%23cfc0a8'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e3e0d8'/%3E%3Ccircle cx='50' cy='22' r='9' fill='%23c8b49e'/%3E%3Crect x='38' y='32' width='10' height='52' rx='4' fill='%23cfc0a8'/%3E%3Crect x='52' y='32' width='10' height='52' rx='4' fill='%23cfc0a8'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Linen Trouser — Sand</span><span class="c-price">$138.00</span></span></a></li>
+              <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Indigo denim jacket" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e6e8ec'/%3E%3Crect x='27' y='24' width='46' height='52' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23dde0e6'/%3E%3Ccircle cx='50' cy='23' r='10' fill='%23c8b49e'/%3E%3Crect x='32' y='33' width='36' height='46' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Denim Jacket — Indigo</span><span class="c-price">$310.00</span></span></a></li>
+            </ul>
+
+            <!-- loading: skeleton -->
+            <ul class="ov-grid cols3 hidden" id="st-loading">
+              <li><div class="sk sk-img"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div></li>
+              <li><div class="sk sk-img"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div></li>
+              <li><div class="sk sk-img"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div></li>
+              <li><div class="sk sk-img"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div></li>
+              <li><div class="sk sk-img"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div></li>
+              <li><div class="sk sk-img"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div></li>
+            </ul>
+
+            <!-- loading: pulse -->
+            <div class="ov-msg hidden" id="st-loading2">
+              <div>
+                <div class="pulse-dot"></div>
+                <strong>Finding your color</strong>
+                Searching the whole catalogue for close matches.
+              </div>
+            </div>
+
+
+            <!-- loading: color settle -->
+            <div class="hidden" id="st-loading3">
+              <ul class="settle-grid"><li><div class="settle"></div></li><li><div class="settle"></div></li><li><div class="settle"></div></li><li><div class="settle"></div></li><li><div class="settle"></div></li><li><div class="settle"></div></li><li><div class="settle"></div></li><li><div class="settle"></div></li></ul>
+              <p style="text-align:center;color:#6b6b6b;font-size:13px;margin-top:16px">
+                Matching products to your color…
+              </p>
+            </div>
+
+            <!-- empty -->
+            <div class="ov-msg hidden" id="st-empty">
+              <div>
+                <strong>No close matches</strong>
+                Nothing in this store is close enough to that color.<br>Try a nearby shade.
+                <br><button class="btn"><span class="ov-wheel"></span>Pick another color</button>
+              </div>
+            </div>
+
+            <!-- error -->
+            <div class="ov-msg hidden" id="st-error">
+              <div>
+                <strong>Color search is unavailable</strong>
+                Please try again in a moment.
+                <br><button class="btn">Try again</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ov-foot">Powered by SMART COLORS</div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h4>Loading — three options</h4>
+          <p>Each says something different, so the choice is about what matters most in that second.</p>
+          <p style="margin-top:6px"><strong>Skeleton</strong> shows the shape of the answer, so the grid
+             doesn't jump when results land. The safest, and the least memorable.</p>
+          <p style="margin-top:6px"><strong>Hue sweep</strong> is branded — a color bar under the header
+             plus a pulsing swatch of the searched color.</p>
+          <p style="margin-top:6px"><strong>Color settle</strong> shows tiles resolving from grey into
+             the searched color, one at a time. It is the only one that says what is actually happening
+             — matching products to a color — and it uses the shopper's own color, so it looks different
+             on every search. The uneven timing is deliberate: results arriving, not a progress bar.</p>
+          <p style="margin-top:6px">Any two can combine (sweep bar above skeleton cards, for instance).</p>
+        </div>
+        <div class="note">
+          <h4>Empty is not an error</h4>
+          <p>Says <em>why</em>, and offers the next action. Hoppn shows "0 Results" during import, which a
+             shopper cannot tell apart from a broken app. Never show a bare zero.</p>
+        </div>
+        <div class="note">
+          <h4>Header</h4>
+          <p>Hex bubble top-left with the searched color and live match count. Top-right is
+             <strong>"Change Color" with the gradient wheel</strong>, as requested.</p>
+          <p style="margin-top:6px">A picked color shows its <strong>hex</strong>, as above — the search
+             API returns the matched hex, not a friendly name. Showing "Dusty Rose" instead is a small
+             follow-up, and worth doing: a name reads far better than <code>#C9839E</code>.</p>
+        </div>
+        <div class="note">
+          <h4>Still open</h4>
+          <p>The empty and error states work but are plain text — they would carry a small mark or
+             illustration well if you want one. Same for the "added to cart" confirmation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. MOBILE ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">04</div>
+      <h2>Mobile</h2>
+      <p>The overlay is full-screen on mobile — there is no visible page behind it, so it behaves as a
+         screen, not a modal. Tested on iPhone 14 Pro Max, iOS 26.6, Safari.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage light">
+        <div class="phone">
+          <div class="ov">
+            <div class="ov-head">
+              <span class="ov-sw"></span>
+              <span class="ov-titles">
+                <span class="ov-name">#C9839E</span>
+                <span class="ov-count">24 matches</span>
+              </span>
+              <span class="ov-spacer"></span>
+              <button class="ov-change"><span class="ov-wheel"></span><span class="lbl">Change Color</span></button>
+              <button class="ov-close" aria-label="Close">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <div class="ov-body">
+              <ul class="ov-grid">
+                <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Dusty rose cotton shirt" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Crect x='28' y='22' width='44' height='56' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Cotton Shirt — Dusty Rose</span><span class="c-price">$295.00</span></span></a></li>
+                <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Blush silk scarf" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Cpath d='M25 25h50v50H25z' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Silk Scarf — Blush</span><span class="c-price">$85.00</span></span></a></li>
+                <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Sand linen trouser" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ecebe6'/%3E%3Crect x='32' y='20' width='16' height='62' rx='4' fill='%23cfc0a8'/%3E%3Crect x='52' y='20' width='16' height='62' rx='4' fill='%23cfc0a8'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e3e0d8'/%3E%3Ccircle cx='50' cy='22' r='9' fill='%23c8b49e'/%3E%3Crect x='38' y='32' width='10' height='52' rx='4' fill='%23cfc0a8'/%3E%3Crect x='52' y='32' width='10' height='52' rx='4' fill='%23cfc0a8'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Linen Trouser — Sand</span><span class="c-price">$138.00</span></span></a></li>
+                <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="Indigo denim jacket" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e6e8ec'/%3E%3Crect x='27' y='24' width='46' height='52' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23dde0e6'/%3E%3Ccircle cx='50' cy='23' r='10' fill='%23c8b49e'/%3E%3Crect x='32' y='33' width='36' height='46' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"><button class="c-atc" aria-label="Add to cart" onclick="return addFx(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button></span><span class="c-body"><span class="c-title">Denim Jacket — Indigo</span><span class="c-price">$310.00</span></span></a></li>
+              </ul>
+            </div>
+            <div class="ov-foot">Powered by SMART COLORS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h4>Touch targets stay 44px</h4>
+          <p>The chrome shrinks but Close and Change Color stay <code>44×44</code>. The swatch moves
+             <em>onto</em> the Change button and the label is dropped, so the header never carries the
+             color twice.</p>
+        </div>
+        <div class="note">
+          <h4>No hover on touch</h4>
+          <p>Add-to-cart is <strong>always visible</strong> on mobile. The second image needs a different
+             trigger — <strong>design decision needed:</strong> tap-to-swap, a small carousel dot, or skip
+             it on mobile entirely.</p>
+        </div>
+        <div class="note">
+          <h4>Two columns</h4>
+          <p>Below 600px. Capped deliberately — smaller than this and a shopper cannot judge a color,
+             which is the only thing this product does.</p>
+        </div>
+        <div class="note">
+          <h4>Verified</h4>
+          <p>Scroll position is preserved on close, the page behind never moves, and the theme's DOM is
+             byte-identical after close. Already tested on real devices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. MERCHANT SETTINGS ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">05</div>
+      <h2>Merchant layout settings</h2>
+      <p>New in the app embed, under a <strong>Layout</strong> header. These change the grid, so the card
+         has to hold up from 2 to 5 columns.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage">
+        <div class="setting">
+          <div class="lab">Cards per row — desktop<em>Applies above 900px</em></div>
+          <div class="seg" role="group">
+            <button onclick="setCols(3,this)">3</button>
+            <button aria-pressed="true" onclick="setCols(4,this)">4</button>
+            <button onclick="setCols(5,this)">5</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="lab">Cards per row — mobile<em>Below 600px</em></div>
+          <div class="seg" role="group">
+            <button aria-pressed="true">2</button>
+            <button>1</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="lab">Gap between cards<em>Desktop; mobile scales down automatically</em></div>
+          <div class="seg" role="group">
+            <button onclick="setGap(8,this)">S</button>
+            <button aria-pressed="true" onclick="setGap(16,this)">M</button>
+            <button onclick="setGap(28,this)">L</button>
+          </div>
+        </div>
+
+        <div style="margin-top:22px;border-top:1px solid var(--line-2);padding-top:20px;">
+          <div class="preview-panel">
+          <ul class="ov-grid cols3" id="previewGrid" style="font-family:Inter,sans-serif;">
+            <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23efe9ea'/%3E%3Crect x='28' y='22' width='44' height='56' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-title">Cotton Shirt — Dusty Rose</span><span class="c-price">$295.00</span></span></a></li>
+            <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ecebe6'/%3E%3Crect x='32' y='20' width='16' height='62' rx='4' fill='%23cfc0a8'/%3E%3Crect x='52' y='20' width='16' height='62' rx='4' fill='%23cfc0a8'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e3e0d8'/%3E%3Ccircle cx='50' cy='22' r='9' fill='%23c8b49e'/%3E%3Crect x='38' y='32' width='10' height='52' rx='4' fill='%23cfc0a8'/%3E%3Crect x='52' y='32' width='10' height='52' rx='4' fill='%23cfc0a8'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-title">Linen Trouser — Sand</span><span class="c-price">$138.00</span></span></a></li>
+            <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e6e8ec'/%3E%3Crect x='27' y='24' width='46' height='52' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23dde0e6'/%3E%3Ccircle cx='50' cy='23' r='10' fill='%23c8b49e'/%3E%3Crect x='32' y='33' width='36' height='46' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-title">Denim Jacket — Indigo</span><span class="c-price">$310.00</span></span></a></li>
+            <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e9ece7'/%3E%3Crect x='26' y='26' width='48' height='46' rx='7' fill='%238ea37f'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e4dc'/%3E%3Ccircle cx='50' cy='23' r='10' fill='%23c8b49e'/%3E%3Crect x='31' y='33' width='38' height='44' rx='7' fill='%238ea37f'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-title">Knit Sweater — Sage</span><span class="c-price">$225.00</span></span></a></li>
+            <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8e8e8'/%3E%3Crect x='28' y='18' width='44' height='64' rx='5' fill='%233f3f42'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23dfe4e2'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%233f3f42'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-title">Wool Coat — Charcoal</span><span class="c-price">$495.00</span></span></a></li>
+          </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h4>Technically confirmed</h4>
+          <p>Gap is already a CSS variable (<code>--sc-gap</code>), so it is nearly free. Columns are
+             currently fixed at three breakpoints and become variables. Mobile gets its own value —
+             the overlay already has a mobile block.</p>
+        </div>
+        <div class="note">
+          <h4>What this asks of the design</h4>
+          <p>The card must stay legible at <strong>5 across on desktop</strong> and <strong>1 across on
+             mobile</strong>. Title clamps to 2 lines at every size; price never wraps.</p>
+        </div>
+        <div class="note">
+          <h4>Deliberately not merchant-editable at launch</h4>
+          <p>Colors, fonts and corner radius. The card's internal spacing IS editable — see section
+             05.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ 6. CARD STYLING ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">06</div>
+      <h2>Product card settings</h2>
+      <p>A second group in the app embed, under a <strong>Product card</strong> header. Image ratio is
+         the one that changes the look most, so it is first. Everything below is live — change a
+         setting and the three cards update.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage">
+        <div class="setting">
+          <div class="lab">Image ratio<em>"Adapt" follows the store's own photography</em></div>
+          <div class="seg" role="group">
+            <button aria-pressed="true" onclick="setRatio('adapt',this)">Adapt</button>
+            <button onclick="setRatio('1/1',this)">1:1</button>
+            <button onclick="setRatio('4/5',this)">4:5</button>
+            <button onclick="setRatio('3/4',this)">3:4</button>
+            <button onclick="setRatio('16/9',this)">16:9</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="lab">Image fit<em>Only applies to a fixed ratio</em></div>
+          <div class="seg" role="group">
+            <button aria-pressed="true" onclick="setFit('cover',this)">Fill frame</button>
+            <button onclick="setFit('contain',this)">Fit whole</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="lab">Lines shown<em>Brand name, title, price</em></div>
+          <div class="seg" role="group">
+            <button onclick="toggleLine('vendor',this)">Brand</button>
+            <button aria-pressed="true" onclick="toggleLine('title',this)">Title</button>
+            <button aria-pressed="true" onclick="toggleLine('price',this)">Price</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="lab">Space between text lines<em>Brand, title and price</em></div>
+          <div class="seg" role="group">
+            <button onclick="setTGap(0,this)">0</button>
+            <button aria-pressed="true" onclick="setTGap(4,this)">4</button>
+            <button onclick="setTGap(8,this)">8</button>
+            <button onclick="setTGap(12,this)">12</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="lab">Space above the text<em>Between image and first line</em></div>
+          <div class="seg" role="group">
+            <button onclick="setTOff(0,this)">0</button>
+            <button aria-pressed="true" onclick="setTOff(10,this)">10</button>
+            <button onclick="setTOff(18,this)">18</button>
+            <button onclick="setTOff(24,this)">24</button>
+          </div>
+        </div>
+
+        <div style="margin-top:22px;border-top:1px solid var(--line-2);padding-top:20px;">
+          <div class="preview-panel">
+            <ul class="ov-grid cols3 hide-vendor" id="cardPreview" style="font-family:Inter,sans-serif;--d-imgh:auto;">
+              <li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='300'%3E%3Crect width='200' height='300' fill='%23efe9ea'/%3E%3Crect x='55' y='40' width='90' height='220' rx='10' fill='%23c9839e'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4dadd'/%3E%3Ccircle cx='50' cy='24' r='10' fill='%23c8b49e'/%3E%3Crect x='33' y='34' width='34' height='50' rx='6' fill='%23c9839e'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-vendor">Kith</span><span class="c-title">Cotton Shirt — Dusty Rose</span><span class="c-price">$295.00</span></span></a></li><li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='180'%3E%3Crect width='300' height='180' fill='%23e6e8ec'/%3E%3Crect x='60' y='45' width='180' height='90' rx='10' fill='%23394a6b'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23dde0e6'/%3E%3Ccircle cx='50' cy='23' r='10' fill='%23c8b49e'/%3E%3Crect x='32' y='33' width='36' height='46' rx='6' fill='%23394a6b'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-vendor">Kith</span><span class="c-title">Denim Jacket — Indigo</span><span class="c-price">$310.00</span></span></a></li><li><a class="c" href="#" onclick="return false"><span class="c-media"><img class="c-img main" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Crect width='240' height='240' fill='%23e9ece7'/%3E%3Crect x='55' y='55' width='130' height='130' rx='12' fill='%238ea37f'/%3E%3C/svg%3E"><img class="c-img alt" alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e4dc'/%3E%3Ccircle cx='50' cy='23' r='10' fill='%23c8b49e'/%3E%3Crect x='31' y='33' width='38' height='44' rx='7' fill='%238ea37f'/%3E%3C/svg%3E"></span><span class="c-body"><span class="c-vendor">Norse Projects</span><span class="c-title">Knit Sweater — Sage</span><span class="c-price">$225.00</span></span></a></li>
+            </ul>
+          </div>
+          <p style="font-size:12.5px;color:var(--ink-3);margin-top:10px">
+            The three products are deliberately different shapes — tall, wide and square — so a ratio
+            change is visible rather than theoretical. On a real store they are usually all the same
+            shape, which is why "Adapt" looks identical to a fixed ratio there.
+          </p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h4>Why image ratio matters most</h4>
+          <p><strong>Adapt to image</strong> reads the proportions of the store's own photography and
+             applies them to every card — so a store shooting square gets square, one shooting 4:5 gets
+             4:5, with no setting to choose. Rows stay aligned either way.</p>
+          <p style="margin-top:6px">A <strong>fixed ratio</strong> overrides that when a merchant wants
+             a specific shape regardless of their source images.</p>
+        </div>
+        <div class="note">
+          <h4>One ratio, not one per card</h4>
+          <p>"Adapt" takes the ratio from the first result and gives every card the same one. A ratio
+             <em>per card</em> is the obvious reading and it produces a grid nobody wants — measured on
+             four mixed-shape products, the titles landed at four different heights because each card
+             hugs its own image.</p>
+          <p style="margin-top:6px">Fit is ignored under "Adapt": the frame already matches the source,
+             so there is nothing to crop or letterbox.</p>
+        </div>
+        <div class="note">
+          <h4>Brand name is free</h4>
+          <p>It comes from the same request that already fetches prices, so showing it costs no extra
+             load. Off by default — most fashion stores sell one brand, where it would repeat on every
+             card.</p>
+        </div>
+        <div class="note">
+          <h4>Hidden lines take their space with them</h4>
+          <p>Turning off the title removes its spacing too, rather than leaving a gap where it was.</p>
+        </div>
+        <div class="note">
+          <h4>Adapt is the default</h4>
+          <p>A merchant who never opens these settings gets their own photography's proportions, which
+             is right far more often than a square we picked for them. A fixed ratio is there for
+             stores with inconsistent source images.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. TOKENS ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">07</div>
+      <h2>What is built today</h2>
+      <p>Current values, for reference. Any of them can change — this is what exists, not what must be.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage">
+        <h3>Card</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Element</th><th>Current</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td>Image box</td><td class="num">adapt</td><td>From the store's own images; merchant-settable</td></tr>
+              <tr><td>Title</td><td class="num">13px / 1.4</td><td>Clamped to 2 lines</td></tr>
+              <tr><td>Price</td><td class="num">16px / 1.4</td><td>Tabular figures</td></tr>
+              <tr><td>Body padding</td><td class="num">10px 2px 0</td><td>Below the image</td></tr>
+              <tr><td>Image hover</td><td class="num">scale 1.03</td><td>Replaced by 2nd image</td></tr>
+              <tr><td>Font</td><td class="num">inherited</td><td>The store's own typeface</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top:26px">Overlay shell</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Element</th><th>Desktop</th><th>Mobile</th></tr></thead>
+            <tbody>
+              <tr><td>Padding</td><td class="num">20px</td><td class="num">12px</td></tr>
+              <tr><td>Grid gap</td><td class="num">16px</td><td class="num">10px</td></tr>
+              <tr><td>Columns</td><td class="num">4</td><td class="num">2</td></tr>
+              <tr><td>Header swatch</td><td class="num">26px</td><td class="num">on button</td></tr>
+              <tr><td>Close target</td><td class="num">36px</td><td class="num">44px</td></tr>
+              <tr><td>Open transition</td><td class="num">240ms</td><td class="num">240ms</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h4>Reduced motion</h4>
+          <p>Every animation here is wrapped in <code>prefers-reduced-motion</code>. Any new motion must
+             have a still fallback.</p>
+        </div>
+        <div class="note">
+          <h4>Accessibility baseline</h4>
+          <p>Focus trap while open, Escape closes, focus returns to the element that opened it. New
+             controls need a visible focus state — not just a hover state.</p>
+        </div>
+        <div class="note">
+          <h4>Light and dark</h4>
+          <p>The overlay is currently light-only. <strong>Decision needed:</strong> do we follow the
+             store's own scheme, or stay light everywhere?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8. ASKS ============ -->
+  <section style="border-bottom:0">
+    <div class="sec-head">
+      <div class="sec-num">08</div>
+      <h2>What's still open</h2>
+      <p>Ordered by what blocks implementation first. Most are a pick-one question rather than work for
+         a designer — everything marked <span class="tag have">built</span> already exists.</p>
+    </div>
+
+    <div class="deliv">
+      <div class="deliv-row"><span class="n">01</span><span class="what">Add to cart — floating or under the price?<em>Both built and compared in section 02. We suggest under the price; it is more discoverable.</em></span><span class="tag need">decision</span></div>
+      <div class="deliv-row"><span class="n">02</span><span class="what">Loading animation<em>Pick one of the three above, or propose better. Must work with an unknown number of results.</em></span><span class="tag need">design</span></div>
+      <div class="deliv-row"><span class="n">03</span><span class="what">Second image on hover<em>Built and shown in section 01. Confirm the cross-fade feels right, and that showing the second image by default on mobile is fine.</em></span><span class="tag need">decision</span></div>
+      <div class="deliv-row"><span class="n">04</span><span class="what">Card at 2, 3, 4 and 5 across<em>Merchant-selectable, so every width has to hold.</em></span><span class="tag need">design</span></div>
+      <div class="deliv-row"><span class="n">05</span><span class="what">Empty and error states<em>A mark or illustration. Copy is written.</em></span><span class="tag have">built</span></div>
+      <div class="deliv-row"><span class="n">06</span><span class="what">"Change Color" button<em>Gradient wheel icon plus label, as requested.</em></span><span class="tag have">built</span></div>
+      <div class="deliv-row"><span class="n">07</span><span class="what">Sold-out treatment<em>Badge and dimming. Never demoted in ranking.</em></span><span class="tag have">built</span></div>
+      <div class="deliv-row"><span class="n">08</span><span class="what">Image ratio and fit<em>Merchant settings, defaulting to "Adapt" — the store's own proportions, applied uniformly.</em></span><span class="tag have">built</span></div>
+      <div class="deliv-row"><span class="n">09</span><span class="what">Light and dark<em>Follow the store's scheme, or stay light everywhere.</em></span><span class="tag need">decision</span></div>
+    </div>
+
+    <div style="margin-top:26px">
+      <div class="callout">
+        <strong>Scope note.</strong> Merchant-editable colors, fonts and corner radius are deliberately
+        out for launch. What ships is layout (cards per row, gap) and the card itself (image ratio and
+        fit, which lines show, text spacing).
+      </div>
+      <div class="callout">
+        <strong>One constraint worth knowing.</strong> Add-to-cart is ours, not the theme's — we cannot
+        reuse a store's own cart button. So its design is entirely our decision, and it has to read as
+        intentional on any store, from minimal to maximal.
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    Smart Colors
   </div>
-
-  <h2>Where each app wins</h2>
-  <p class="section-note">Family-by-family breakdown, ordered as tested. Read as: which app's top 8 was closer to the queried shade, more often, across the 5 rows in that family.</p>
-
-  <div class="table-wrap">
-  <table class="family-table">
-    <thead>
-      <tr><th>Family</th><th>Result</th></tr>
-    </thead>
-    <tbody>
-      <tr><td class="fam-name">Red</td><td><span class="pill loss">Hoppn 3</span> <span class="pill win">us 1</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Orange</td><td><span class="pill loss">Hoppn 3</span> <span class="pill draw">draw 2</span></td></tr>
-      <tr><td class="fam-name">Yellow</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Chartreuse / Yellow-green</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Green</td><td><span class="pill loss">Hoppn 3</span> <span class="pill win">us 1</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Cyan</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Teal</td><td><span class="pill draw">draw 3</span> <span class="pill loss">Hoppn 2</span></td></tr>
-      <tr><td class="fam-name">Blue</td><td><span class="pill draw">draw 3</span> <span class="pill loss">Hoppn 2</span></td></tr>
-      <tr><td class="fam-name">Indigo</td><td><span class="pill loss">Hoppn 4</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Purple</td><td><span class="pill draw">draw 3</span> <span class="pill loss">Hoppn 2</span></td></tr>
-      <tr><td class="fam-name">Pink / Magenta</td><td><span class="pill draw">draw 2</span> <span class="pill loss">Hoppn 2</span> <span class="pill win">us 1</span></td></tr>
-      <tr><td class="fam-name">Brown</td><td><span class="pill loss">Hoppn 3</span> <span class="pill win">us 1</span> <span class="pill draw">draw 1</span></td></tr>
-      <tr><td class="fam-name">Beige / Khaki / Taupe</td><td><span class="pill win">us 4</span> <span class="pill loss">Hoppn 1</span></td></tr>
-      <tr><td class="fam-name">Nude / Skin-tone</td><td><span class="pill loss">Hoppn 3</span> <span class="pill draw">draw 2</span></td></tr>
-      <tr><td class="fam-name">Denim wash</td><td><span class="pill loss">Hoppn 4</span> <span class="pill win">us 1</span></td></tr>
-      <tr><td class="fam-name">Metallics</td><td><span class="pill loss">Hoppn 3</span> <span class="pill draw">draw 1</span> <span class="pill win">us 1</span></td></tr>
-      <tr><td class="fam-name">Neutrals (White–Black)</td><td><span class="pill draw">draw 4</span> <span class="pill loss">Hoppn 1</span></td></tr>
-    </tbody>
-  </table>
-  </div>
-
-  <h2>What's actually going wrong for us</h2>
-  <p class="section-note">Tagged failure type across all 85 rows, most frequent first.</p>
-
-  <div class="finding loss-type">
-    <div class="finding-title">Ranking problems — <span class="finding-count">33 rows</span></div>
-    <p>Our top 8 sorts the wrong products to the top, or a single visually-close cluster of items (a print family, a fabric pattern) crowds out genuinely on-color garments. This is by far the biggest gap, more than four times any other failure type.</p>
-  </div>
-
-  <div class="example">
-    <div class="ex-label">Example — Row 4, Deep red / brick</div>
-    <p>Hoppn returned deep brick red throughout. We returned a red-and-green patchwork cluster: the same Siena Patchwork Shirt, Iris Patchwork Scarf Tie, and Printed Silk Sarong each shown twice, filling 6 of 8 slots with one print family instead of spreading across genuinely brick-red garments.</p>
-  </div>
-
-  <div class="finding loss-type">
-    <div class="finding-title">Duplicate products in the same top 8 — <span class="finding-count">113 slots across ~25 rows</span></div>
-    <p>The same product (often the exact same listing, sometimes a near-variant) appears twice in one result grid, wasting a slot that could have surfaced a different genuine match.</p>
-  </div>
-
-  <div class="finding loss-type">
-    <div class="finding-title">Off-family or accessory bleed — <span class="finding-count">9 rows combined</span></div>
-    <p>Results include items that are not actually the queried color family, most visibly on gray and metallic queries where silver-toned sneakers and sunglasses got pulled in alongside genuinely gray garments.</p>
-  </div>
-
-  <div class="example">
-    <div class="ex-label">Example — Row 83, Gray</div>
-    <p>Only 2 of 8 results were genuinely gray garments. The rest were white and silver-metallic sneakers plus sunglasses in red, green, navy, and blue accents, pulled in through a silver-metallic association rather than an actual gray hue match. Hoppn returned 7 of 8 genuinely gray-toned items.</p>
-  </div>
-
-  <h2>Where we're strong</h2>
-  <p class="section-note">Beige, khaki, and taupe was the one family where we won outright, 4 of 5 rows.</p>
-
-  <div class="finding win-type">
-    <div class="finding-title">Beige / Khaki / Taupe — <span class="finding-count">4 of 5 rows won</span></div>
-    <p>Clean, on-hue results with no duplicates across most of this family, consistently beating Hoppn's precision on sand, khaki, and taupe tones.</p>
-  </div>
-
-  <div class="example">
-    <div class="ex-label">Example — Row 61, Pastel beige / ivory</div>
-    <p>Our results: 8 of 8 genuine, 8 distinct products, a clean pale warm-white to vanilla to ivory match with zero duplicates.</p>
-  </div>
-
-  <div class="finding win-type">
-    <div class="finding-title">Neutrals (white–black) — <span class="finding-count">4 draws, 1 loss</span></div>
-    <p>Both apps handle pure black and white queries cleanly. Neither had a hue miss here, and duplication was not a factor.</p>
-  </div>
-
-  <div class="closing">
-    <p><b>Bottom line:</b> Hoppn wins on precision and consistency across most saturated hues (red, orange, yellow, green, cyan, indigo), largely because our top-8 ranking surfaces duplicate products and off-target clusters more often than it should. We hold a clear edge on beige, khaki, and taupe tones, and the two apps are effectively tied on blue, purple, teal, pink, and neutral black/white queries.</p>
-    <p>For more info on each color there's the notes and notion link column to get more details on each comparison, and also check the top 8 of both Smart Colors and Hoppn, you can view it in the notion link where I uploaded both screenshots.</p>
-  </div>
-
-  <footer>Source: docs/color-accuracy-set2.csv · tetrachrom-read-write-test.myshopify.com · 1,679 products</footer>
-
 </div>
+
+<script>
+  function showState(which, btn) {
+    ['results','loading','loading2','loading3','empty','error'].forEach(function (s) {
+      var el = document.getElementById('st-' + s);
+      if (el) el.classList.toggle('hidden', s !== which);
+    });
+    document.getElementById('huebar').classList.toggle('hidden', which !== 'loading2');
+    var cnt = document.getElementById('cnt');
+    cnt.textContent = which.indexOf('loading') === 0 ? 'Searching…'
+      : which === 'empty' ? 'No matches'
+      : which === 'error' ? '' : '24 matches';
+    var group = btn.parentElement;
+    Array.prototype.forEach.call(group.children, function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+  }
+
+  function addFx(btn) {
+    btn.classList.add('is-added');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+    setTimeout(function () {
+      btn.classList.remove('is-added');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+    }, 1400);
+    return false;
+  }
+
+  function press(btn) {
+    Array.prototype.forEach.call(btn.parentElement.children, function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+  }
+  function setCols(n, btn) {
+    var g = document.getElementById('previewGrid');
+    g.className = 'ov-grid' + (n === 3 ? ' cols3' : n === 2 ? ' cols2' : '');
+    g.style.gridTemplateColumns = 'repeat(' + n + ', 1fr)';
+    press(btn);
+  }
+  function setGap(px, btn) {
+    document.getElementById('previewGrid').style.gap = px + 'px';
+    press(btn);
+  }
+
+  function pressIn(btn) {
+    Array.prototype.forEach.call(btn.parentElement.children, function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+  }
+  function setRatio(r, btn) {
+    var g = document.getElementById('cardPreview');
+    if (r === 'adapt') {
+      // Same rule as the build: ONE ratio for the grid, read from the first image, not a
+      // ratio per card. Per-card leaves every title at a different height.
+      var im = g.querySelector('.c-img');
+      var apply = function () {
+        if (!im.naturalWidth || !im.naturalHeight) return;
+        g.style.setProperty('--d-ratio', im.naturalWidth + ' / ' + im.naturalHeight);
+        g.style.setProperty('--d-imgh', '100%');
+      };
+      if (im.complete) apply(); else im.addEventListener('load', apply, { once: true });
+    } else {
+      g.style.setProperty('--d-ratio', r.replace('/',' / '));
+      g.style.setProperty('--d-imgh', '100%');
+    }
+    pressIn(btn);
+  }
+  function setFit(f, btn) {
+    document.getElementById('cardPreview').style.setProperty('--d-fit', f);
+    pressIn(btn);
+  }
+  function toggleLine(which, btn) {
+    var on = btn.getAttribute('aria-pressed') !== 'true';
+    btn.setAttribute('aria-pressed', String(on));
+    document.getElementById('cardPreview').classList.toggle('hide-' + which, !on);
+  }
+  function setTGap(px, btn) {
+    document.getElementById('cardPreview').style.setProperty('--d-tgap', px + 'px');
+    pressIn(btn);
+  }
+  function setTOff(px, btn) {
+    document.getElementById('cardPreview').style.setProperty('--d-toff', px + 'px');
+    pressIn(btn);
+  }
+  // The preview opens in "Adapt", which is the shipped default, so the starting ratio has to be
+  // measured rather than hardcoded -- same as the real overlay does on every render.
+  (function initAdapt() {
+    var g = document.getElementById('cardPreview');
+    if (!g) return;
+    var im = g.querySelector('.c-img');
+    var apply = function () {
+      if (!im.naturalWidth || !im.naturalHeight) return;
+      g.style.setProperty('--d-ratio', im.naturalWidth + ' / ' + im.naturalHeight);
+      g.style.setProperty('--d-imgh', '100%');
+    };
+    if (im.complete) apply(); else im.addEventListener('load', apply, { once: true });
+  })();
+
+  function addInline(btn) {
+    btn.classList.add('is-added');
+    var prev = btn.textContent;
+    btn.textContent = 'Added';
+    setTimeout(function () { btn.classList.remove('is-added'); btn.textContent = prev; }, 1400);
+    return false;
+  }
+</script>
