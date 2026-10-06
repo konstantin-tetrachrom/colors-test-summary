@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
 <title>Smart Colors — Overlay Design Spec</title>
 <style>
   :root {
@@ -159,13 +160,22 @@
     align-items: start;
   }
   @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 26px; } }
+  @media (max-width: 480px) {
+    .wrap { padding-left: 16px; padding-right: 16px; }
+    .stage { padding: 14px; }
+    table { font-size: 12px; }
+    th, td { padding-right: 8px; }
+  }
 
   .stage {
     background: var(--raised);
     border: 1px solid var(--line);
     border-radius: var(--r);
     padding: 24px;
-    overflow-x: auto;
+    /* Deliberately NOT a scroll container. Everything inside is fluid, and a
+       scrollbar inside a frame that is meant to read as a finished screen looks
+       like a bug rather than an affordance. */
+    min-width: 0;
   }
   .stage.plain { padding: 0; overflow: hidden; }
   /* A stage holding the (light-only) overlay mock keeps a light surface, so the
@@ -212,12 +222,11 @@
   .callout + .callout { margin-top: 12px; }
 
   /* ---------- spec tables ---------- */
-  .tbl-wrap { overflow-x: auto; }
+  .tbl-wrap { overflow-x: auto; }   /* kept as a safety net; nothing should reach it */
   table {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
-    min-width: 400px;
   }
   th {
     text-align: left;
@@ -236,7 +245,7 @@
     color: var(--ink-2);
     vertical-align: top;
   }
-  td:first-child { color: var(--ink); font-weight: 550; white-space: nowrap; }
+  td:first-child { color: var(--ink); font-weight: 550; }
   td.num, td.tok {
     font-family: var(--mono);
     font-size: 12px;
@@ -585,6 +594,7 @@
   /* ---------- mobile frame ---------- */
   .phone {
     width: 300px;
+    max-width: 100%;
     border: 1px solid #E6E2E9;
     border-radius: 24px;
     padding: 8px;
@@ -1415,3 +1425,5 @@
     return false;
   }
 </script>
+
+</body></html>
